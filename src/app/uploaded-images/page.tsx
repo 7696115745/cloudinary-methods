@@ -9,6 +9,7 @@ export default function Page() {
 
   const cloudinaryApi = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
   const cloudinarySecret = process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET;
+  console.log("secret",cloudinarySecret)
   const cloudinaryId = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
   const getCloudinaryImages = async () => {
