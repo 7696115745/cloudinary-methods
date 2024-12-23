@@ -33,7 +33,6 @@ export default function Page() {
     // }
   };
   getCloudinaryImages()
-
   // useEffect(() => {
   //   getCloudinaryImages();
   // },[images]);
