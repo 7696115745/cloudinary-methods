@@ -1,48 +1,60 @@
 "use client";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-// import Image from "next/image";
+import Image from "next/image";
 export default function Page() {
-  // const [images, setImages] = useState([]);
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState(null);
+  const [images, setImages] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const cloudinaryApi = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY;
   const cloudinarySecret = process.env.NEXT_PUBLIC_CLOUDINARY_API_SECRET;
-  console.log("secret",cloudinarySecret)
   const cloudinaryId = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
 
   const getCloudinaryImages = async () => {
-    // setLoading(true);
-    // setError(null);
+    setLoading(true);
+    setError(null);
     try {
       const response = await axios.get(
         `https://${cloudinaryApi}:${cloudinarySecret}@api.cloudinary.com/v1_1/${cloudinaryId}/resources/image`
       );
-      console.log("response",response.data)
-      // if (response.data.success) {
-      //   // setImages(response.data);
-      // }
+      console.log("response", response.data);
+      if (response.data.success) {
+        setImages(response.data);
+      }
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
-     catch(error) {
-      // setError(error.message);
-      console.log("error",error)
-    } 
-    // finally {
-    //   // setLoading(false);
-    // }
   };
-  getCloudinaryImages()
-  // useEffect(() => {
-  //   getCloudinaryImages();
-  // },[images]);
+  const handleDelete=async (publicId:string)=>{
+    try{
+      const response=await axios.delete(`https://${cloudinaryApi}:${cloudinarySecret}@api.cloudinary.com/v1_1/${cloudinaryId}/resources/image/upload/${publicId}`
+      )
+      if(response.data.sucess){
+        setImages((prevImages) =>
+          prevImages.filter((image) => image.public_id !== publicId)
+        );
+      }
+   
+    }
+    catch(error:any){
+      console.log("error",error)
+    }
+
+  }
+
+  useEffect(() => {
+    getCloudinaryImages();
+  }, [images]);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-2xl font-bold text-center mb-6">
         Cloudinary Image Gallery
       </h1>
-{/* 
+
       <div className="flex justify-center mb-4">
         <button
           onClick={getCloudinaryImages}
@@ -50,9 +62,9 @@ export default function Page() {
         >
           {loading ? "Loading..." : "Refresh Images"}
         </button>
-      </div> */}
+      </div>
 
-      {/* {error && <p className="text-red-500 text-center">Error: {error}</p>}
+      {error && <p className="text-red-500 text-center">Error: {error}</p>}
 
       {images.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -61,7 +73,7 @@ export default function Page() {
               key={image.public_id}
               className="bg-white rounded-lg shadow-md overflow-hidden"
             >
-              <Image 
+              <Image
                 src={image.secure_url}
                 alt={image.public_id}
                 className="w-full h-48 object-cover"
@@ -69,12 +81,20 @@ export default function Page() {
               <div className="p-2">
                 <p className="text-sm truncate">{image.public_id}</p>
               </div>
+              <div>
+                <button className="font-semibold bg-red-500 text-white rounded-md py-1 px-2" onClick={()=>handleDelete(image.public_id)}>
+                  Remove
+                </button>
+              </div>
             </div>
           ))}
         </div>
-      ) : ( */}
-        <p className="text-center text-gray-500">No images found.</p>
-      {/* )} */}
+      ) : (
+        <>
+          {" "}
+          <p className="text-center text-gray-500">No images found.</p>
+        </>
+      )}
     </div>
   );
 }

@@ -1,6 +1,5 @@
 "use client";
-
-// import { CldUploadButton } from 'next-cloudinary';
+import { CldUploadButton } from 'next-cloudinary';
 
 export default function Page() {
   return (
@@ -10,12 +9,12 @@ export default function Page() {
         <p className="text-sm text-gray-500 text-center mb-6">
           Click the button below to upload your file to Cloudinary.
         </p>
-        {/* <CldUploadButton */}
+        <CldUploadButton
           uploadPreset="demo56"
           className="w-full bg-red-500 text-white rounded-md font-semibold py-2 px-4 hover:bg-red-600 transition-colors"
-        {/* > */}
+        >
           Upload File
-        {/* </CldUploadButton> */}
+        </CldUploadButton>
       </div>
     </div>
   );
