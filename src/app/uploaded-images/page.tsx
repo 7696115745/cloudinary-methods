@@ -15,7 +15,7 @@ export default function Page() {
     setError(null);
     try {
       const response = await axios.get(
-        `https://${cloudinaryApi}:${cloudinarySecret}@api.cloudinary.com/v1_1/${cloudinaryId}/resources/image`,);
+        `https://${cloudinaryApi}:${cloudinarySecret}@api.cloudinary.com/v1_1/${cloudinaryId}/resources/image`);
 
         console.log("reaponse",response.data)
  
